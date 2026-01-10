@@ -3,7 +3,7 @@ import ContactForm from "./ContactForm";
 
 export default function ContactPage() {
   return (
-    <main className="space-y-10 px-6 py-16">
+    <main className="space-y-10 bg-[#F7F3EA] px-6 py-16 text-[#0B2A3A]">
       <section className="mx-auto max-w-5xl space-y-4 text-center">
         <p className="text-xs font-semibold tracking-[0.32em] text-[#0EA5A8]">CONTACT</p>
         <h1 className="text-4xl font-semibold text-[#062338] md:text-6xl">Let’s Build Your Plate</h1>
