@@ -2,13 +2,14 @@
 
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { useSearchParams } from "next/navigation";
-import { sendContact } from "./actions";
 
 type Status =
   | { state: "idle" }
   | { state: "sending" }
   | { state: "success" }
   | { state: "error"; message: string };
+
+type ApiResult = { ok: true } | { ok: false; message: string; debug?: unknown };
 
 export default function ContactForm() {
   const searchParams = useSearchParams();
@@ -88,7 +89,16 @@ export default function ContactForm() {
         const formData = new FormData(form);
 
         startTransition(async () => {
-          const result = await sendContact(formData);
+          let result: ApiResult;
+          try {
+            const response = await fetch("/api/contact", { method: "POST", body: formData });
+            result = (await response.json()) as ApiResult;
+          } catch (error) {
+            console.error("[ContactForm] network error", error);
+            setStatus({ state: "error", message: "Network error. Please try again." });
+            return;
+          }
+
           if (result.ok) {
             form.reset();
             setDetails("");
@@ -96,7 +106,7 @@ export default function ContactForm() {
             return;
           }
           setStatus({ state: "error", message: result.message });
-          console.error("[ContactForm] sendContact failed", result);
+          console.error("[ContactForm] send failed", result);
         });
       }}
     >
