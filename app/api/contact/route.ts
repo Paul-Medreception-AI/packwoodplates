@@ -6,10 +6,18 @@ function asString(value: FormDataEntryValue | null): string {
   return typeof value === "string" ? value : "";
 }
 
+function cleanEnvEmail(value: string): string {
+  const v = value.trim();
+  if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) {
+    return v.slice(1, -1).trim();
+  }
+  return v;
+}
+
 export async function POST(request: Request) {
   const apiKey = process.env.RESEND_API_KEY;
-  const from = process.env.RESEND_FROM || "onboarding@resend.dev";
-  const to = process.env.CONTACT_TO || "packwoodplates@gmail.com";
+  const from = cleanEnvEmail(process.env.RESEND_FROM || "orders@packwoodsplates.com");
+  const to = cleanEnvEmail(process.env.CONTACT_TO || "orders@packwoodsplates.com");
 
   if (!apiKey) {
     return Response.json({ ok: false, message: "Missing RESEND_API_KEY on the server." }, { status: 500 });
