@@ -89,7 +89,7 @@ export async function sendContact(formData: FormData): Promise<SendContactResult
       replyTo: stripHeaderUnsafe(email),
       subject: `Packwood Plates Inquiry — ${name}`,
       text: [
-        "New inquiry from packwoodplates.com",
+        "New inquiry from packwoodsplates.com",
         "",
         `Name: ${name}`,
         `Email: ${email}`,
@@ -117,15 +117,15 @@ export async function sendContact(formData: FormData): Promise<SendContactResult
 <!doctype html>
 <html>
   <head>
-    <meta charset=\"utf-8\" />
-    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Packwood Plates Inquiry</title>
   </head>
-  <body style=\"margin:0;padding:0;background:#f6f7fb;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#062338;\">
-    <table role=\"presentation\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" style=\"background:#f6f7fb;padding:24px 12px;\">
+  <body style="margin:0;padding:0;background:#f6f7fb;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#062338;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f6f7fb;padding:24px 12px;">
       <tr>
-        <td align=\"center\">
-          <table role=\"presentation\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" style=\"max-width:640px;background:#ffffff;border:1px solid rgba(14,165,168,0.22);border-radius:20px;overflow:hidden;\">
+        <td align="center">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:640px;background:#ffffff;border:1px solid rgba(14,165,168,0.22);border-radius:20px;overflow:hidden;">
             <tr>
               <td style=\"padding:18px 20px;background:linear-gradient(135deg,#103780 0%, #0EA5A8 100%);color:#ffffff;\">
                 <div style=\"font-size:12px;letter-spacing:0.32em;font-weight:700;opacity:0.9;\">PACKWOOD PLATES</div>
@@ -133,21 +133,21 @@ export async function sendContact(formData: FormData): Promise<SendContactResult
               </td>
             </tr>
             <tr>
-              <td style=\"padding:18px 20px;\">
-                <div style=\"margin:0 0 10px;font-size:14px;color:rgba(6,35,56,0.8);\">New inquiry from <a href=\"https://packwoodplates.com\" style=\"color:#0EA5A8;text-decoration:none;\">packwoodplates.com</a></div>
-                <div style=\"margin:0 0 4px;\"><strong>Name:</strong> ${safeName}</div>
-                <div style=\"margin:0 0 4px;\"><strong>Email:</strong> <a href=\"mailto:${safeEmail}\" style=\"color:#103780;text-decoration:underline;\">${safeEmail}</a></div>
+              <td style="padding:18px 20px;">
+                <div style="margin:0 0 10px;font-size:14px;color:rgba(6,35,56,0.8);">New inquiry from <a href="https://packwoodsplates.com" style="color:#0EA5A8;text-decoration:none;">packwoodsplates.com</a></div>
+                <div style="margin:0 0 4px;"><strong>Name:</strong> ${safeName}</div>
+                <div style="margin:0 0 4px;"><strong>Email:</strong> <a href="mailto:${safeEmail}" style="color:#103780;text-decoration:underline;">${safeEmail}</a></div>
                 ${phoneLine}
                 ${consentLine}
-                <hr style=\"border:none;border-top:1px solid rgba(6,35,56,0.12);margin:14px 0;\" />
-                <div style=\"font-weight:700;margin:0 0 6px;\">Details</div>
-                <div style=\"font-size:14px;line-height:1.55;color:rgba(6,35,56,0.9);white-space:normal;\">${safeDetails}</div>
+                <hr style="border:none;border-top:1px solid rgba(6,35,56,0.12);margin:14px 0;" />
+                <div style="font-weight:700;margin:0 0 6px;">Details</div>
+                <div style="font-size:14px;line-height:1.55;color:rgba(6,35,56,0.9);white-space:normal;">${safeDetails}</div>
               </td>
             </tr>
             <tr>
-              <td style=\"padding:14px 20px;background:#f8fafc;color:rgba(6,35,56,0.65);font-size:12px;\">
+              <td style="padding:14px 20px;background:#f8fafc;color:rgba(6,35,56,0.65);font-size:12px;">
                 <div>Reply directly to this email to respond to the customer.</div>
-                <div style=\"margin-top:6px;\">Packwood Plates • <a href=\"https://packwoodplates.com\" style=\"color:#0EA5A8;text-decoration:none;\">packwoodplates.com</a></div>
+                <div style="margin-top:6px;">Packwood Plates • <a href="https://packwoodsplates.com" style="color:#0EA5A8;text-decoration:none;">packwoodsplates.com</a></div>
               </td>
             </tr>
           </table>

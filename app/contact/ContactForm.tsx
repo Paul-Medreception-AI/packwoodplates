@@ -219,11 +219,14 @@ export default function ContactForm() {
             name="consentText"
             value="yes"
             className="mt-1 h-4 w-4 accent-[#0EA5A8]"
+            defaultChecked
             disabled={isDisabled}
           />
           <span>
-            OK to text me about this quote.
-            <span className="block text-xs text-[#0B2A3A]/70">Only for updates about this request. Msg/data rates may apply.</span>
+            OK to text me about this quote. Uncheck if you do not want text updates.
+            <span className="block text-xs text-[#0B2A3A]/70">
+              Only for updates about this request. Msg/data rates may apply.
+            </span>
           </span>
         </label>
       </div>
