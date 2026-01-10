@@ -9,7 +9,20 @@ type Status =
   | { state: "success" }
   | { state: "error"; message: string };
 
-type ApiResult = { ok: true } | { ok: false; message: string; debug?: unknown };
+type ApiResult =
+  | { ok: true; requestId?: string }
+  | { ok: false; message: string; requestId?: string; debug?: unknown };
+
+function makeClientRequestId() {
+  try {
+    if (typeof globalThis.crypto !== "undefined" && typeof globalThis.crypto.randomUUID === "function") {
+      return globalThis.crypto.randomUUID();
+    }
+  } catch {
+    // ignore
+  }
+  return `${Date.now()}_${Math.random().toString(16).slice(2)}`;
+}
 
 export default function ContactForm() {
   const searchParams = useSearchParams();
@@ -87,24 +100,59 @@ export default function ContactForm() {
 
         const form = event.currentTarget;
         const formData = new FormData(form);
+        const clientRequestId = makeClientRequestId();
+        formData.set("_clientRequestId", clientRequestId);
+
+        console.log("[ContactForm] submit", {
+          clientRequestId,
+          hasAttachment: (formData.get("attachment") instanceof File && (formData.get("attachment") as File).size > 0) || false,
+          detailsLength: String(formData.get("details") || "").length,
+          hasEmail: Boolean(formData.get("email")),
+        });
 
         startTransition(async () => {
           let result: ApiResult;
           try {
+            const startedAt = performance.now();
             const response = await fetch("/api/contact", { method: "POST", body: formData });
+            const durationMs = Math.round(performance.now() - startedAt);
+
+            console.log("[ContactForm] response", {
+              clientRequestId,
+              status: response.status,
+              ok: response.ok,
+              durationMs,
+            });
             if (!response.ok) {
               let message = "Request failed. Please try again.";
+              let requestId: string | undefined;
               try {
-                const body = (await response.json()) as { message?: unknown };
+                const body = (await response.json()) as { message?: unknown; requestId?: unknown; debug?: unknown };
                 if (typeof body.message === "string" && body.message.trim().length > 0) message = body.message;
+                if (typeof body.requestId === "string") requestId = body.requestId;
+
+                console.error("[ContactForm] server error body", {
+                  clientRequestId,
+                  requestId: requestId || null,
+                  body,
+                });
               } catch {
                 // ignore
+              }
+
+              if (requestId) {
+                console.error("[ContactForm] request failed (server requestId)", { clientRequestId, requestId });
               }
               setStatus({ state: "error", message });
               return;
             }
 
             result = (await response.json()) as ApiResult;
+            console.log("[ContactForm] success body", {
+              clientRequestId,
+              requestId: result.requestId || null,
+              result,
+            });
           } catch (error) {
             console.error("[ContactForm] network error", error);
             setStatus({ state: "error", message: "Network error. Please try again." });
