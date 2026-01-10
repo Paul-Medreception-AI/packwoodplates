@@ -92,6 +92,18 @@ export default function ContactForm() {
           let result: ApiResult;
           try {
             const response = await fetch("/api/contact", { method: "POST", body: formData });
+            if (!response.ok) {
+              let message = "Request failed. Please try again.";
+              try {
+                const body = (await response.json()) as { message?: unknown };
+                if (typeof body.message === "string" && body.message.trim().length > 0) message = body.message;
+              } catch {
+                // ignore
+              }
+              setStatus({ state: "error", message });
+              return;
+            }
+
             result = (await response.json()) as ApiResult;
           } catch (error) {
             console.error("[ContactForm] network error", error);

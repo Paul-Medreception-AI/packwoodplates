@@ -9,7 +9,7 @@ function asString(value: FormDataEntryValue | null): string {
 export async function POST(request: Request) {
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.RESEND_FROM || "onboarding@resend.dev";
-  const to = process.env.CONTACT_TO || "info@packwoodplates.com";
+  const to = process.env.CONTACT_TO || "packwoodplates@gmail.com";
 
   if (!apiKey) {
     return Response.json({ ok: false, message: "Missing RESEND_API_KEY on the server." }, { status: 500 });
@@ -47,7 +47,7 @@ export async function POST(request: Request) {
 
   try {
     const resend = new Resend(apiKey);
-    await resend.emails.send({
+    const { data, error } = await resend.emails.send({
       from,
       to,
       replyTo: email,
@@ -65,6 +65,23 @@ export async function POST(request: Request) {
       ].join("\n"),
       attachments: attachments.length ? attachments : undefined,
     });
+
+    if (error || !data?.id) {
+      const errorMessage = error
+        ? typeof error === "string"
+          ? error
+          : (error as { message?: string }).message || JSON.stringify(error)
+        : "Unknown error sending email.";
+
+      return Response.json(
+        {
+          ok: false,
+          message: `Resend error: ${errorMessage}`,
+          debug: { from, to, hasApiKey: Boolean(apiKey) },
+        },
+        { status: 502 }
+      );
+    }
 
     return Response.json({ ok: true });
   } catch (error) {

@@ -56,7 +56,7 @@ export async function sendContact(formData: FormData): Promise<SendContactResult
 
   try {
     const resend = new Resend(apiKey);
-    await resend.emails.send({
+    const { data, error } = await resend.emails.send({
       from,
       to,
       replyTo: email,
@@ -74,6 +74,20 @@ export async function sendContact(formData: FormData): Promise<SendContactResult
       ].join("\n"),
       attachments: attachments.length ? attachments : undefined,
     });
+
+    if (error || !data?.id) {
+      const errorMessage = error
+        ? typeof error === "string"
+          ? error
+          : (error as { message?: string }).message || JSON.stringify(error)
+        : "Unknown error sending email.";
+
+      return {
+        ok: false,
+        message: `Resend error: ${errorMessage}`,
+        debug: { hasApiKey: true, hasFrom: Boolean(process.env.RESEND_FROM), from },
+      };
+    }
 
     return { ok: true };
   } catch (error) {
