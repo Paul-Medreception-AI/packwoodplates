@@ -10,7 +10,7 @@ type Status =
   | { state: "error"; message: string };
 
 type ApiResult =
-  | { ok: true; requestId?: string }
+  | { ok: true; requestId?: string; resendId?: string }
   | { ok: false; message: string; requestId?: string; debug?: unknown };
 
 function makeClientRequestId() {
@@ -151,6 +151,7 @@ export default function ContactForm() {
             console.log("[ContactForm] success body", {
               clientRequestId,
               requestId: result.requestId || null,
+              resendId: "resendId" in result ? result.resendId || null : null,
               result,
             });
           } catch (error) {
